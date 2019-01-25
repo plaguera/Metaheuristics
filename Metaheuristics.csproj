@@ -38,6 +38,7 @@
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Coordinate.cs" />
+    <Compile Include="Models\Distances.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -47,6 +48,7 @@
   <ItemGroup>
     <None Include="Data\Categories.csv" />
     <None Include="Data\Locations.csv" />
+    <None Include="Data\Distances.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

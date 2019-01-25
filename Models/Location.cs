@@ -14,6 +14,13 @@ namespace Metaheuristics.Models
             return null;
         }
 
+        public static Location Instance(string name)
+        {
+            foreach (Location location in Instances)
+                if (location.Name.Equals(name)) return location;
+            return null;
+        }
+
         public static Location Instantiate(int id, double latitude, double longitude, string name, int category)
         {
             Instances.Add(new Location(id, latitude, longitude, name, category));
@@ -24,6 +31,7 @@ namespace Metaheuristics.Models
         public Coordinate Coordinate { get; private set; }
         public int ID { get; private set; }
         public string Name { get; private set; }
+        public Dictionary<Location, int> Distances { get; private set; }
 
         Location(int id, double latitude, double longitude, string name, int category) : this(id, new Coordinate(latitude, longitude), name, Category.Instance(category)) {}
 
@@ -33,6 +41,12 @@ namespace Metaheuristics.Models
             Coordinate = coordinate;
             Name = name;
             Category = category;
+            Distances = new Dictionary<Location, int>();
+        }
+
+        public void AddDistance(Location location, int distance)
+        {
+            Distances.Add(location, distance);
         }
 
         public override string ToString()
