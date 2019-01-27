@@ -39,11 +39,16 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Coordinate.cs" />
     <Compile Include="Models\Distances.cs" />
+    <Compile Include="Algorithms\GRASP.cs" />
+    <Compile Include="Models\Edge.cs" />
+    <Compile Include="Algorithms\Algorithm.cs" />
+    <Compile Include="Algorithms\VariableNeighborhoodSearch.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Utils\" />
     <Folder Include="Models\" />
+    <Folder Include="Algorithms\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Categories.csv" />

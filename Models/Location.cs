@@ -23,6 +23,7 @@ namespace Metaheuristics.Models
 
         public static Location Instantiate(int id, double latitude, double longitude, string name, int category)
         {
+            //if (Instance(name) != null) return null; 
             Instances.Add(new Location(id, latitude, longitude, name, category));
             return Instances.Last();
         }
@@ -47,9 +48,50 @@ namespace Metaheuristics.Models
         public void AddDistance(Location location, int distance)
         {
             Distances.Add(location, distance);
+            Edge.Instantiate(this, location, distance);
+        }
+
+        public Location Closest(List<Location> locations)
+        {
+            Location closest = null;
+            int distance = int.MaxValue;
+            foreach (KeyValuePair<Location, int> pair in Distances)
+                if (!locations.Contains(pair.Key) && pair.Value < distance)
+                    closest = pair.Key;
+            return closest;
+        }
+
+        public Location Closest()
+        {
+            Location closest = null;
+            int distance = int.MaxValue;
+            foreach (KeyValuePair<Location, int> pair in Distances)
+                if (pair.Value < distance)
+                {
+                    closest = pair.Key;
+                    distance = pair.Value;
+                }
+            return closest;
+        }
+
+        public List<Location> Closest(int amount, List<Location> locations)
+        {
+            var ordered = Distances.OrderBy((arg) => arg.Value);
+            List<Location> result = new List<Location>();
+            foreach (KeyValuePair<Location, int> location in ordered)
+            {
+                if (!locations.Contains(location.Key)) result.Add(location.Key);
+                if (result.Count == amount) break;
+            }
+            return result;
         }
 
         public override string ToString()
+        {
+            return Name;
+        }
+
+        public string ToStringLong()
         {
             return $"<Location [{GetHashCode()}]: ID = {ID}, Name = {Name}, Coordinates = {Coordinate}, Category = {Category}>";
         }
