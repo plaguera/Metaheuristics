@@ -43,6 +43,8 @@
     <Compile Include="Models\Edge.cs" />
     <Compile Include="Algorithms\Algorithm.cs" />
     <Compile Include="Algorithms\VariableNeighborhoodSearch.cs" />
+    <Compile Include="Algorithms\SimulatedAnnealing.cs" />
+    <Compile Include="Algorithms\TabuSearch.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />

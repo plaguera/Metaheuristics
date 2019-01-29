@@ -7,19 +7,22 @@ namespace Metaheuristics.Algorithms
 {
     public abstract class Algorithm
     {
-        protected readonly int RLC = 3;
+        // DEFAULTS
+        protected const int DEFAULT_RLC = 3, DEFAULT_PATH_LENGTH = 10;
+
         protected readonly Random Random = new Random();
-        protected Location Initial;
-        protected int PathLength = 30;
+        protected readonly Location Initial;
+        protected readonly int RLC, PathLength;
+
+
+        protected Algorithm(Location initial = null, int rlc = DEFAULT_RLC, int path_length = DEFAULT_PATH_LENGTH)
+        {
+            Initial = initial ?? Location.Random();
+            PathLength = path_length;
+            RLC = rlc;
+        }
 
         public abstract int Start(int iterations);
-
-        public int Start(int iterations, Location initial, int path_length = 10)
-        {
-            Initial = initial;
-            PathLength = path_length;
-            return Start(iterations);
-        }
 
         protected Location RandomRLCMember(List<Location> candidates)
         {
@@ -47,7 +50,29 @@ namespace Metaheuristics.Algorithms
             return candidates.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         }
 
-        protected int PathCost(List<Location> locations)
+        protected List<Location> GreedyRandomizedConstruction()
+        {
+            List<Location> Solution = new List<Location>();
+            List<Location> Solutionº;
+            if (Initial == null) Solution.Add(Edge.LowestCost().From);
+            else Solution.Add(Initial);
+
+            do
+            {
+                Solutionº = new List<Location>(Solution);
+                Location k = RandomRLCMember(BuildRLC(Solution));
+
+                if (Solution.Count == PathLength-1)
+                    Solution.Add(Solution.First());
+                else if (Solution.Count < PathLength && PathCost(Solution, k) >= PathCost(Solution))
+                    Solution.Add(k);
+
+            } while (Solution.Count <= PathLength && !Solution.SequenceEqual(Solutionº));
+
+            return Solution;
+        }
+
+        public static int PathCost(List<Location> locations)
         {
             int cost = 0;
             for (int i = 0; i < locations.Count - 1; i++)
@@ -55,7 +80,7 @@ namespace Metaheuristics.Algorithms
             return cost;
         }
 
-        protected int PathCost(List<Location> locations, Location location)
+        public static int PathCost(List<Location> locations, Location location)
         {
             return PathCost(locations) + locations.Last().Distances[location];
         }

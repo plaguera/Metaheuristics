@@ -7,14 +7,20 @@ namespace Metaheuristics.Algorithms
 {
     public class VariableNeighborhoodSearch : GRASP
     {
-        public int Start(int bvns, int kMax)
-        {
+        readonly int kMax;
 
+        public VariableNeighborhoodSearch(  int kmax = 3,
+                                            Location initial = null, int rlc = DEFAULT_RLC, int path_length = DEFAULT_PATH_LENGTH)
+                                            : base(initial, rlc, path_length)
+                                            { kMax = kmax; }
+
+        public override int Start(int iterations)
+        {
             List<Location> solution = GreedyRandomizedConstruction();
             List<Location> solution_ = new List<Location>();
             List<Location> solution__ = new List<Location>();
             int cost = PathCost(solution), temp = 0, k = 1;
-            for (int i = 0; i < bvns; i++)
+            for (int i = 0; i < iterations; i++)
             {
                 k = 1;
                 while (k <= kMax)
@@ -43,21 +49,29 @@ namespace Metaheuristics.Algorithms
             List<Location> result = new List<Location>();
             List<Location> rlc = BuildRLC(x);
             List<Location> s = new List<Location>(x);
+            List<int> indexes = new List<int>();
             int add = 0;
             for (int i = 0; i < k && i < rlc.Count && s.Any(); i++)
             {
-                s.Remove(RandomRLCMember(s));
+                Location location = s[Random.Next(1, s.Count-2)];
+                indexes.Add(s.IndexOf(location));
+                s.Remove(location);
                 add++;
             }
             foreach (Location i in s)
                 result.Add(i);
             for (int i = 0; i < add; i++)
+                result.Add(null);
+
+            for (int i = 0; i < add; i++)
             {
                 Location tmp = RandomRLCMember(rlc);
-                result.Add(tmp);
+                result.Insert(indexes[i], tmp);
                 rlc.Remove(tmp);
             }
+            result.RemoveAll((obj) => obj == null);
             return result;
         }
     }
+
 }

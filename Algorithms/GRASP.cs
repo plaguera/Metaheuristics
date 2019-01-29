@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Metaheuristics.Models;
 
@@ -7,6 +6,8 @@ namespace Metaheuristics.Algorithms
 {
     public class GRASP : Algorithm
     {
+        public GRASP(Location initial = null, int rlc = DEFAULT_RLC, int path_length = DEFAULT_PATH_LENGTH) : base(initial, rlc, path_length) {}
+
         public override int Start(int iterations)
         {
             List<Location> solution = new List<Location>();
@@ -16,6 +17,7 @@ namespace Metaheuristics.Algorithms
             {
                 solution = GreedyRandomizedConstruction();
                 solution = LocalSearch(solution);
+
                 temp = PathCost(solution);
                 if (min > temp)
                 {
@@ -23,39 +25,7 @@ namespace Metaheuristics.Algorithms
                     minl = new List<Location>(solution);
                 }
             }
-            Initial = null;
-            //foreach (Location i in minl)
-                //Console.WriteLine(i);
             return PathCost(minl);
-        }
-
-        public List<Location> GreedyRandomizedConstruction()
-        {
-            List<Location> Solution = new List<Location>();
-            List<Location> Solutionº;
-            if (Initial == null)
-            {
-                Edge initial = Edge.LowestCost();
-                Solution.Add(initial.From);
-                Solution.Add(initial.To);
-            }
-            else
-            {
-                Solution.Add(Initial);
-                Solution.Add(Initial.Closest());
-            }
-
-            do
-            {
-                Solutionº = new List<Location>(Solution);
-                Location k = RandomRLCMember(BuildRLC(Solution));
-
-                if (k != null && PathCost(Solution, k) >= PathCost(Solution))
-                    Solution.Add(k);
-
-            } while (Solution.Count < PathLength && !Solution.SequenceEqual(Solutionº));
-
-            return Solution;
         }
 
         protected List<Location> LocalSearch(List<Location> solution)
@@ -64,16 +34,16 @@ namespace Metaheuristics.Algorithms
             if (!lc.Any()) return solution;
             List<Location> temp = new List<Location>();
             List<Location> sol = new List<Location>();
-            int min = int.MaxValue; 
-            int cost = 0;
+            int min = int.MaxValue, cost = 0;
 
             foreach (Location candidate in lc)
                 foreach (Location location in solution)
                 {
                     if (location == Initial) continue;
                     temp = new List<Location>(solution);
+                    int i = temp.IndexOf(location);
                     temp.Remove(location);
-                    temp.Add(candidate);
+                    temp.Insert(i, candidate);
                     cost = PathCost(temp);
                     if (min > cost)
                     {
@@ -81,7 +51,6 @@ namespace Metaheuristics.Algorithms
                         min = cost;
                     }
                 }
-
             return sol;
         }
     }

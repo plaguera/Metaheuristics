@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Metaheuristics.Algorithms;
 using Metaheuristics.Models;
@@ -28,39 +27,36 @@ namespace Metaheuristics
             Utils.Parse.CSV<Location>(FILE_LOCATION);
             Distances.Parse(FILE_DISTANCES);
 
+            GRASP GRASP = new GRASP(Location.Instance("Plaza del Adelantado"));
+            SimulatedAnnealing SA = new SimulatedAnnealing(50, .05, Location.Instance("Plaza del Adelantado"));
+            TabuSearch TS = new TabuSearch(Location.Instance("Plaza del Adelantado"));
+            VariableNeighborhoodSearch VNS = new VariableNeighborhoodSearch(3, Location.Instance("Plaza del Adelantado"));
+
             Console.WriteLine("GRASP:");
-            RunGRASP(10);
+            Run(GRASP, 15);
+            //Console.WriteLine("SA:");
+            //Run(SA, 15);
+            //Console.WriteLine("TS:");
+            //Run(TS, 15);
             Console.WriteLine("\nVNS:");
-            RunVNS(10);
+            Run(VNS, 15);
 
         }
 
-        static void RunGRASP(int tests)
+        static void Run(Algorithm algorithm, int tests)
         {
-            GRASP GRASP = new GRASP();
+            int sum = 0;
             for (int i = 1; i <= tests; i++)
             {
                 stopWatch.Start();
-                int result = GRASP.Start(ITERATIONS_GRASP, Location.Instance("Plaza del Adelantado"), 30);
+                int result = algorithm.Start(ITERATIONS_SA);
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
                 Console.WriteLine($"Execution = {i}, Cost = {result} Minutes, CPU = {ts.ToString("ss'.'fffffff")} Seconds");
                 stopWatch.Reset();
+                sum += result;
             }
-        }
-
-        static void RunVNS(int tests)
-        {
-            VariableNeighborhoodSearch VNS = new VariableNeighborhoodSearch();
-            for (int i = 1; i <= tests; i++)
-            {
-                stopWatch.Start();
-                int result = VNS.Start(ITERATIONS_VNS, K_MAX);
-                stopWatch.Stop();
-                TimeSpan ts = stopWatch.Elapsed;
-                Console.WriteLine($"Execution = {i}, Cost = {result} Minutes, CPU = {ts.ToString("ss'.'fffffff")} Seconds");
-                stopWatch.Reset();
-            }
+            Console.WriteLine($"Mean = {sum / tests}");
         }
     }
 }

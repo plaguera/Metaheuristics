@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Metaheuristics.Models
@@ -61,29 +62,10 @@ namespace Metaheuristics.Models
             return closest;
         }
 
-        public Location Closest()
+        public static Location Random()
         {
-            Location closest = null;
-            int distance = int.MaxValue;
-            foreach (KeyValuePair<Location, int> pair in Distances)
-                if (pair.Value < distance)
-                {
-                    closest = pair.Key;
-                    distance = pair.Value;
-                }
-            return closest;
-        }
-
-        public List<Location> Closest(int amount, List<Location> locations)
-        {
-            var ordered = Distances.OrderBy((arg) => arg.Value);
-            List<Location> result = new List<Location>();
-            foreach (KeyValuePair<Location, int> location in ordered)
-            {
-                if (!locations.Contains(location.Key)) result.Add(location.Key);
-                if (result.Count == amount) break;
-            }
-            return result;
+            Random random = new Random();
+            return Instances[random.Next(Instances.Count)];
         }
 
         public override string ToString()
