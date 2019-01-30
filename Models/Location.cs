@@ -52,13 +52,11 @@ namespace Metaheuristics.Models
             Edge.Instantiate(this, location, distance);
         }
 
-        public Location Closest(List<Location> locations)
+        public List<Location> Closest()
         {
-            Location closest = null;
-            int distance = int.MaxValue;
-            foreach (KeyValuePair<Location, int> pair in Distances)
-                if (!locations.Contains(pair.Key) && pair.Value < distance)
-                    closest = pair.Key;
+            List<Location> closest = new List<Location>();
+            foreach (var item in Distances.OrderBy(obj => obj.Value))
+                closest.Add(item.Key);
             return closest;
         }
 
