@@ -9,7 +9,7 @@ namespace Metaheuristics.Algorithms
     {
         readonly int Neighbours;
 
-        public TabuSearch(int neighbours = 4, Location initial = null, int rlc = DEFAULT_RLC, int path_length = DEFAULT_PATH_LENGTH) : base(initial, rlc, path_length)
+        public TabuSearch(int neighbours = 3, Location initial = null, int rlc = DEFAULT_RLC, int path_length = DEFAULT_PATH_LENGTH) : base(initial, rlc, path_length)
         {
             Neighbours = neighbours;
         }

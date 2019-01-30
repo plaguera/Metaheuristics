@@ -28,18 +28,18 @@ namespace Metaheuristics
             Distances.Parse(FILE_DISTANCES);
 
             GRASP GRASP = new GRASP(Location.Instance("Plaza del Adelantado"));
-            SimulatedAnnealing SA = new SimulatedAnnealing(10, .05, Location.Instance("Plaza del Adelantado"));
-            TabuSearch TS = new TabuSearch(2, Location.Instance("Plaza del Adelantado"));
-            VariableNeighborhoodSearch VNS = new VariableNeighborhoodSearch(3, Location.Instance("Plaza del Adelantado"));
+            SimulatedAnnealing SA = new SimulatedAnnealing(50, .05, Location.Instance("Plaza del Adelantado"));
+            TabuSearch TS = new TabuSearch(7, Location.Instance("Plaza del Adelantado"));
+            VariableNeighborhoodSearch VNS = new VariableNeighborhoodSearch(5, Location.Instance("Plaza del Adelantado"));
 
-            //Console.WriteLine("GRASP:");
-            //Run(GRASP, 15);
-            //Console.WriteLine("\nSA:");
-            //Run(SA, 1);
+            Console.WriteLine("GRASP:");
+            Run(GRASP, 20);
+            Console.WriteLine("\nSA:");
+            //Run(SA, 20);
             Console.WriteLine("\nTS:");
-            Run(TS, 150);
+            Run(TS, 20);
             //Console.WriteLine("\nVNS:");
-            //Run(VNS, 15);
+            //Run(VNS, 20);
 
         }
 
